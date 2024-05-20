@@ -1,4 +1,4 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext } from "react";
 import CurrentWeather from "./CurrentWeather";
 import SearchCity from "./SearchCity";
 import NextDays from "./NextDays";
