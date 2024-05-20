@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
 const SearchCity = ({ onSearch }) => {
   const {
@@ -8,7 +9,7 @@ const SearchCity = ({ onSearch }) => {
     handleSubmit,
     clearErrors,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode: "onSubmit", reValidateMode: "onSubmit" });
 
   const onSubmit = (data) => {
     onSearch(data.city);
@@ -43,13 +44,15 @@ const SearchCity = ({ onSearch }) => {
         </button>
       </div>
 
-      {errors.city && (
-        <>
+      <ErrorMessage
+        errors={errors}
+        name="city"
+        render={({ message }) => (
           <p className="flex w-full justify-center text-red-500 md:left-[550px] mt-2 text-l">
-            {errors.city.message}
+            {message}
           </p>
-        </>
-      )}
+        )}
+      />
     </form>
   );
 };
