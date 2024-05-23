@@ -3,9 +3,12 @@ import { BsSunrise } from "react-icons/bs";
 import useFetch from "../hooks/useFetch";
 import { BsSunset } from "react-icons/bs";
 import { format } from "date-fns";
-
-const SunRise = ({ city }) => {
-  const { data } = useFetch(city);
+import { useContext } from "react";
+import { CityContext } from "./Home";
+import { slugify } from "transliteration";
+const SunRise = () => {
+  const { city } = useContext(CityContext);
+  const { data } = useFetch(slugify(city));
   const sunrise =
     data && data.forecast ? data.forecast.forecastday[0].astro.sunrise : null;
   const sunset =

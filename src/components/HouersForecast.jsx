@@ -4,9 +4,14 @@ import WeatherIcon from "./WeatherIcon";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useContext } from "react";
+import { CityContext } from "./Home";
+import { slugify } from "transliteration";
 
-const HouersForecast = ({ city }) => {
-  const { data, error } = useFetch(city, "current");
+const HouersForecast = () => {
+  const { city } = useContext(CityContext);
+
+  const { data, error } = useFetch(slugify(city), "current");
   const dataArr =
     data && data.forecast ? [data.forecast.forecastday[0].hour] : null;
   let dataSelectedHouers = [];
@@ -31,6 +36,23 @@ const HouersForecast = ({ city }) => {
       },
     ],
   };
+
+  let dataForSelectedHouers = dataSelectedHouers.map((el, index) => {
+    let date = new Date(el.time);
+    let houer = date.getHours();
+    return (
+      <div
+        className="flex flex-col items-center justify-center text-white text-center"
+        key={index}
+      >
+        <div className="text-center text-2xl w-full">{houer}:00</div>
+        <div className="w-full flex justify-center">
+          <WeatherIcon size={90} imagesrc={el.condition.icon} />
+        </div>
+        <p className="text-2xl">{el.temp_c}°C</p>
+      </div>
+    );
+  });
   return (
     <>
       {error && <div>Błąd pobierania danych - {error.message}</div>}
@@ -40,45 +62,11 @@ const HouersForecast = ({ city }) => {
             <h1 className="text-3xl w-full h-auto pl-[55px] text-white md:text-blue-400 hidden md:block">
               Pogoda godzinowa:
             </h1>
-            <div className="w-10/12 mx-auto mt-5 md:hidden">
-              <Slider {...settings}>
-                {dataSelectedHouers.map((el, index) => {
-                  let date = new Date(el.time);
-                  let houer = date.getHours();
-                  return (
-                    <div
-                      className="flex flex-col items-center justify-center text-white text-center"
-                      key={index}
-                    >
-                      <div className="text-center text-2xl w-full">
-                        {houer}:00
-                      </div>
-                      <div className="w-full flex justify-center">
-                        <WeatherIcon size={90} imagesrc={el.condition.icon} />
-                      </div>
-                      <p className="text-2xl">{el.temp_c}°C</p>
-                    </div>
-                  );
-                })}
-              </Slider>
+            <div className="w-9/12 mx-auto mt-5 md:hidden">
+              <Slider {...settings}>{dataForSelectedHouers}</Slider>
             </div>
             <div className="md:grid md:grid-cols-6 gap-y-10 mt-5rounded-xl p-5 md:bg-transparent hidden">
-              {dataSelectedHouers.map((el, index) => {
-                let date = new Date(el.time);
-                let houer = date.getHours();
-                return (
-                  <div
-                    className="flex flex-col items-center justify-center text-white"
-                    key={index}
-                  >
-                    <div className="text-center text-2xl w-[100px]">
-                      {houer}:00
-                    </div>
-                    <WeatherIcon size={90} imagesrc={el.condition.icon} />
-                    <p className="text-2xl">{el.temp_c}°C</p>
-                  </div>
-                );
-              })}
+              {dataForSelectedHouers}
             </div>
           </>
         )}

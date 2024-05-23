@@ -39,7 +39,11 @@ const Home = () => {
   //renderowanie komponentów z tablicy miast
   const renderCities = citiesArr.map((city, index) => {
     return (
-      <div key={index}>
+      <div
+        key={index}
+        onClick={() => setCity(city[0])}
+        className="cursor-pointer"
+      >
         <MapMarker city={city[0]} />
       </div>
     );
@@ -47,10 +51,10 @@ const Home = () => {
 
   return (
     <CityContext.Provider value={{ city, setCity }}>
-      <div className="w-full flex flex-col h-full min-h-screen bg-gradient-to-b from-slate-800 to-slate-600 md:from-blue-300 md:to-blue-200">
-        <div className="md:max-w-[900px] w-full mx-auto h-full min-h-screen flex flex-col md:border-l-2 md:border-r-2 md:border-slate-400 md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 md:bg-black">
+      <div className="w-full flex flex-col h-full min-h-screen bg-gradient-to-b from-slate-800 to-slate-600 md:from-gray-400 md:to-gray-200">
+        <div className="md:max-w-[900px] w-full mx-auto h-full min-h-screen flex flex-col md:border-l-2 md:border-r-2 md:border-slate-400 md:backdrop-filter md:backdrop-blur-md md:bg-opacity-70 md:bg-black">
           <Link to="/" onClick={handleHomeClick}>
-            <h1 className="md:text-4xl text-2xl font-bold md:ml-5 md:mt-5 text-white md:text-left text-center mt-5 ">
+            <h1 className="md:text-4xl text-2xl font-bold md:ml-5  text-white md:text-left text-center md:relative md:top-5 mt-2 md:mt-0">
               WeatherWise
             </h1>
           </Link>
@@ -66,7 +70,7 @@ const Home = () => {
               </div>
             </>
           ) : (
-            <div className="md:grid md:grid-cols-4 h-full mt-[10%] gap-y-24">
+            <div className="grid md:grid-cols-4 grid-cols-2 h-full mt-[5%] 3xl:mt-[15%] gap-y-12 pb-10">
               {renderCities}
             </div>
           )}

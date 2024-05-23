@@ -34,7 +34,7 @@ const SearchCity = ({ onSearch }) => {
         <input
           type="text"
           {...register("city", {
-            required: "Miasto jest wymagane!",
+            required: "Nazwa miasta jest wymagana!",
           })}
           className="rounded-full py-3 px-10 bg-transparent placeholder:text-white text-white border-2 select-none focus:outline-none border-white"
           placeholder="Wyszukaj miasto..."
@@ -48,7 +48,7 @@ const SearchCity = ({ onSearch }) => {
         errors={errors}
         name="city"
         render={({ message }) => (
-          <p className="flex w-full justify-center text-red-500 md:left-[550px] mt-2 text-l">
+          <p className="flex w-full justify-center text-red-500 md:left-[550px] mt-2 text-l font-[700]">
             {message}
           </p>
         )}

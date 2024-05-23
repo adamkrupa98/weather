@@ -24,7 +24,7 @@ const CurrentWeather = () => {
           </div>
           <div className="grid md:grid-cols-2 grid-rows-1">
             <div className="flex mt-2 md:mt-3 items-center ml-5 md:ml-0 md:justify-center">
-              <WeatherIcon imagesrc={data.current.condition.icon} size={120} />
+              <WeatherIcon imagesrc={data.current.condition.icon} size={100} />
               <p className="text-[50px] ml-5">{data.current.temp_c}°C</p>
             </div>
             <div className="flex p-5 flex-col mt-2  md:mt-5 justify-center">
