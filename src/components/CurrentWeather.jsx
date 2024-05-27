@@ -1,14 +1,11 @@
 import React from "react";
-import useFetch from "../hooks/useFetch";
 import WeatherIcon from "./WeatherIcon";
 import { FaArrowUp } from "react-icons/fa6";
 import { useContext } from "react";
 import { CityContext } from "./Home";
-import { slugify } from "transliteration";
-const CurrentWeather = () => {
-  const { city } = useContext(CityContext);
 
-  const { data, error } = useFetch(slugify(city));
+const CurrentWeather = ({ city }) => {
+  const { data } = useContext(CityContext);
 
   const arrowStyle = {
     transform: `rotate(${data && data.current && data.current.wind_degree}deg)`,
@@ -16,7 +13,6 @@ const CurrentWeather = () => {
 
   return (
     <>
-      {error && <div>Bład: {error.message}</div>}
       {data && data.current && (
         <div className="md:w-[700px] flex flex-col m-5  mt-[50px] text-white mx-auto shadow-xl rounded-2xl">
           <div className="flex items-center md:w-full justify-center">

@@ -6,7 +6,8 @@ import HouersForecast from "./HouersForecast";
 import MapMarker from "./MapMarker";
 import { Link } from "react-router-dom";
 import SunRise from "./SunRise";
-
+import useFetch from "../hooks/useFetch";
+import { slugify } from "transliteration";
 //Tablice miast używana na stronie startowej aplikacji
 const citiesArr = [
   ["Poznań", 30, 38],
@@ -25,6 +26,7 @@ export const CityContext = createContext();
 const Home = () => {
   //stan przechowujacy wybrane miasto
   const [city, setCity] = useState("");
+  const { data, error } = useFetch(slugify(city));
 
   //funkcja do zmiany stanu miasta
   const handleSearch = (searchedCity) => {
@@ -50,7 +52,7 @@ const Home = () => {
   });
 
   return (
-    <CityContext.Provider value={{ city, setCity }}>
+    <CityContext.Provider value={{ data }}>
       <div className="w-full flex flex-col h-full min-h-screen bg-gradient-to-b from-slate-800 to-slate-600 md:from-gray-400 md:to-gray-200">
         <div className="md:max-w-[900px] w-full mx-auto h-full min-h-screen flex flex-col md:border-l-2 md:border-r-2 md:border-slate-400 md:backdrop-filter md:backdrop-blur-md md:bg-opacity-70 md:bg-black">
           <Link to="/" onClick={handleHomeClick}>
@@ -59,10 +61,14 @@ const Home = () => {
             </h1>
           </Link>
           <SearchCity onSearch={handleSearch} />
-
+          {data.error && data.error.code === 1006 && (
+            <div className="md:max-w-full h-screen flex justify-center items-center bg-red-50">
+              Nie znaleziono lokalizacji
+            </div>
+          )}
           {city !== "" ? (
             <>
-              <CurrentWeather />
+              <CurrentWeather city={city} />
               <HouersForecast />
               <div className="flex flex-col md:flex-row h-full">
                 <NextDays />

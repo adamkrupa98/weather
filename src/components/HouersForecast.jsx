@@ -1,17 +1,13 @@
 import React from "react";
-import useFetch from "../hooks/useFetch";
 import WeatherIcon from "./WeatherIcon";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useContext } from "react";
 import { CityContext } from "./Home";
-import { slugify } from "transliteration";
 
 const HouersForecast = () => {
-  const { city } = useContext(CityContext);
-
-  const { data, error } = useFetch(slugify(city), "current");
+  const { data } = useContext(CityContext);
   const dataArr =
     data && data.forecast ? [data.forecast.forecastday[0].hour] : null;
   let dataSelectedHouers = [];
@@ -55,7 +51,6 @@ const HouersForecast = () => {
   });
   return (
     <>
-      {error && <div>Błąd pobierania danych - {error.message}</div>}
       <div className="w-full">
         {dataSelectedHouers.length > 0 && (
           <>
