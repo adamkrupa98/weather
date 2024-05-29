@@ -12,6 +12,7 @@ const SearchCity = ({ onSearch }) => {
   } = useForm({ mode: "onSubmit", reValidateMode: "onSubmit" });
 
   const onSubmit = (data) => {
+    console.log(data.city);
     onSearch(data.city);
   };
 

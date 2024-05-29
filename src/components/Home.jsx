@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import SunRise from "./SunRise";
 import useFetch from "../hooks/useFetch";
 import { slugify } from "transliteration";
+import { GiModernCity } from "react-icons/gi";
+
 //Tablice miast używana na stronie startowej aplikacji
 const citiesArr = [
   ["Poznań", 30, 38],
@@ -26,8 +28,7 @@ export const CityContext = createContext();
 const Home = () => {
   //stan przechowujacy wybrane miasto
   const [city, setCity] = useState("");
-  const { data, error } = useFetch(slugify(city));
-
+  const { data } = useFetch(slugify(city));
   //funkcja do zmiany stanu miasta
   const handleSearch = (searchedCity) => {
     setCity(searchedCity);
@@ -35,7 +36,7 @@ const Home = () => {
 
   //funkcja do przeladowania strony
   const handleHomeClick = () => {
-    window.location.reload();
+    setCity("");
   };
 
   //renderowanie komponentów z tablicy miast
@@ -61,9 +62,10 @@ const Home = () => {
             </h1>
           </Link>
           <SearchCity onSearch={handleSearch} />
-          {data.error && data.error.code === 1006 && (
-            <div className="md:max-w-full h-screen flex justify-center items-center bg-red-50">
-              Nie znaleziono lokalizacji
+          {city !== "" && data && data.error && data.error.code === 1006 && (
+            <div className="md:max-w-full flex h-[500px] mt-[15%] justify-center items-center text-2xl text-white flex-col">
+              <p>Nie znaleziono lokalizacji</p>
+              <GiModernCity size={120} className="mt-10" />
             </div>
           )}
           {city !== "" ? (

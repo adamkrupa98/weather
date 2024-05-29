@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useFetch = (cityName, kind) => {
+const useFetch = (cityName) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +20,7 @@ const useFetch = (cityName, kind) => {
           setError(error);
         });
     }
-  }, [cityName, kind]);
+  }, [cityName]);
   return { data, isLoading, error };
 };
 
