@@ -3,7 +3,7 @@ import { IoMdSearch } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 
-const SearchCity = ({ onSearch }) => {
+const SearchCity = React.forwardRef(({ onSearch }, ref) => {
   const {
     register,
     handleSubmit,
@@ -27,6 +27,7 @@ const SearchCity = ({ onSearch }) => {
 
   return (
     <form
+      ref={ref}
       onSubmit={handleSubmit(onSubmit)}
       className="w-full mt-5 md:absolute md:w-[400px] flex flex-col justify-center md:left-[550px]"
     >
@@ -55,6 +56,6 @@ const SearchCity = ({ onSearch }) => {
       />
     </form>
   );
-};
+});
 
 export default SearchCity;

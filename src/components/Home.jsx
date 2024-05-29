@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useRef } from "react";
 import CurrentWeather from "./CurrentWeather";
 import SearchCity from "./SearchCity";
 import NextDays from "./NextDays";
@@ -6,6 +6,9 @@ import HouersForecast from "./HouersForecast";
 import MapMarker from "./MapMarker";
 import { Link } from "react-router-dom";
 import SunRise from "./SunRise";
+import useFetch from "../hooks/useFetch";
+import { slugify } from "transliteration";
+import { GiModernCity } from "react-icons/gi";
 
 //Tablice miast używana na stronie startowej aplikacji
 const citiesArr = [
@@ -25,6 +28,8 @@ export const CityContext = createContext();
 const Home = () => {
   //stan przechowujacy wybrane miasto
   const [city, setCity] = useState("");
+  const { data } = useFetch(slugify(city));
+  const searchCityFormRef = useRef(null);
 
   //funkcja do zmiany stanu miasta
   const handleSearch = (searchedCity) => {
@@ -33,7 +38,10 @@ const Home = () => {
 
   //funkcja do przeladowania strony
   const handleHomeClick = () => {
-    window.location.reload();
+    setCity("");
+    if (searchCityFormRef.current) {
+      searchCityFormRef.current.reset();
+    }
   };
 
   //renderowanie komponentów z tablicy miast
@@ -50,7 +58,7 @@ const Home = () => {
   });
 
   return (
-    <CityContext.Provider value={{ city, setCity }}>
+    <CityContext.Provider value={{ data }}>
       <div className="w-full flex flex-col h-full min-h-screen bg-gradient-to-b from-slate-800 to-slate-600 md:from-gray-400 md:to-gray-200">
         <div className="md:max-w-[900px] w-full mx-auto h-full min-h-screen flex flex-col md:border-l-2 md:border-r-2 md:border-slate-400 md:backdrop-filter md:backdrop-blur-md md:bg-opacity-70 md:bg-black">
           <Link to="/" onClick={handleHomeClick}>
@@ -58,11 +66,16 @@ const Home = () => {
               WeatherWise
             </h1>
           </Link>
-          <SearchCity onSearch={handleSearch} />
-
+          <SearchCity onSearch={handleSearch} ref={searchCityFormRef} />
+          {city !== "" && data && data.error && data.error.code === 1006 && (
+            <div className="md:max-w-full flex h-[500px] mt-[15%] justify-center items-center text-2xl text-white flex-col">
+              <p>Nie znaleziono lokalizacji</p>
+              <GiModernCity size={120} className="mt-10" />
+            </div>
+          )}
           {city !== "" ? (
             <>
-              <CurrentWeather />
+              <CurrentWeather city={city} />
               <HouersForecast />
               <div className="flex flex-col md:flex-row h-full">
                 <NextDays />

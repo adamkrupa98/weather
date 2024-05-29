@@ -1,14 +1,12 @@
 import React from "react";
 import { BsSunrise } from "react-icons/bs";
-import useFetch from "../hooks/useFetch";
 import { BsSunset } from "react-icons/bs";
 import { format } from "date-fns";
 import { useContext } from "react";
 import { CityContext } from "./Home";
-import { slugify } from "transliteration";
+
 const SunRise = () => {
-  const { city } = useContext(CityContext);
-  const { data } = useFetch(slugify(city));
+  const { data } = useContext(CityContext);
   const sunrise =
     data && data.forecast ? data.forecast.forecastday[0].astro.sunrise : null;
   const sunset =

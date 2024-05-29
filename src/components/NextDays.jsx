@@ -1,14 +1,10 @@
 import React, { useMemo } from "react";
-import useFetch from "../hooks/useFetch";
 import WeatherIcon from "./WeatherIcon";
 import { useContext } from "react";
 import { CityContext } from "./Home";
-import { slugify } from "transliteration";
 
 const NextDays = () => {
-  const { city } = useContext(CityContext);
-
-  const { data, error } = useFetch(slugify(city));
+  const { data } = useContext(CityContext);
 
   const dataArr = useMemo(() => {
     return data && data.forecast ? [data.forecast.forecastday] : null;
@@ -45,7 +41,6 @@ const NextDays = () => {
 
   return (
     <>
-      {error && <div>Błąd...{error.message}</div>}
       {dataArr && (
         <>
           <div className="flex flex-col w-full md:w-1/2 mt-2 text-white mb-10">
