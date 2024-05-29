@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useRef } from "react";
 import CurrentWeather from "./CurrentWeather";
 import SearchCity from "./SearchCity";
 import NextDays from "./NextDays";
@@ -29,6 +29,8 @@ const Home = () => {
   //stan przechowujacy wybrane miasto
   const [city, setCity] = useState("");
   const { data } = useFetch(slugify(city));
+  const searchCityFormRef = useRef(null);
+
   //funkcja do zmiany stanu miasta
   const handleSearch = (searchedCity) => {
     setCity(searchedCity);
@@ -37,6 +39,9 @@ const Home = () => {
   //funkcja do przeladowania strony
   const handleHomeClick = () => {
     setCity("");
+    if (searchCityFormRef.current) {
+      searchCityFormRef.current.reset();
+    }
   };
 
   //renderowanie komponentów z tablicy miast
@@ -61,7 +66,7 @@ const Home = () => {
               WeatherWise
             </h1>
           </Link>
-          <SearchCity onSearch={handleSearch} />
+          <SearchCity onSearch={handleSearch} ref={searchCityFormRef} />
           {city !== "" && data && data.error && data.error.code === 1006 && (
             <div className="md:max-w-full flex h-[500px] mt-[15%] justify-center items-center text-2xl text-white flex-col">
               <p>Nie znaleziono lokalizacji</p>

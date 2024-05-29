@@ -18,6 +18,7 @@ const useFetch = (cityName) => {
         .catch((error) => {
           setIsLoading(false);
           setError(error);
+          console.error("Fetch error: ", error.message);
         });
     }
   }, [cityName]);
