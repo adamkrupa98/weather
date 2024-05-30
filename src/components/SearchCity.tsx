@@ -3,7 +3,10 @@ import { IoMdSearch } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 
-const SearchCity = React.forwardRef(({ onSearch }, ref) => {
+interface SearchCityProps {
+  onSearch: (searchedCity: string) => void;
+}
+const SearchCity = React.forwardRef(({ onSearch }: SearchCityProps, ref) => {
   const {
     register,
     handleSubmit,

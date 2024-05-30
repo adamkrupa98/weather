@@ -3,9 +3,13 @@ import WeatherIcon from "./WeatherIcon";
 import { FaArrowUp } from "react-icons/fa6";
 import { useContext } from "react";
 import { CityContext } from "./Home";
+import WeatherData from "../interfaces/WeatherData";
+interface CurrentWeatherProps {
+  city: string;
+}
 
-const CurrentWeather = ({ city }) => {
-  const { data } = useContext(CityContext);
+const CurrentWeather: React.FC<CurrentWeatherProps> = ({ city }) => {
+  const { data } = useContext<WeatherData>(CityContext);
 
   const arrowStyle = {
     transform: `rotate(${data && data.current && data.current.wind_degree}deg)`,

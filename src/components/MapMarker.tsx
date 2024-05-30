@@ -1,10 +1,10 @@
 import React from "react";
-import useFetch from "../hooks/useFetch";
+import useFetch from "../types/useFetch";
 import { slugify } from "transliteration";
 import WeatherIcon from "./WeatherIcon";
 import { FaArrowUp } from "react-icons/fa6";
 
-const MapMarker = ({ city, xval, yval }) => {
+const MapMarker = ({ city }) => {
   const { data } = useFetch(slugify(city), "current");
   const arrowStyle = {
     transform: `rotate(${data && data.current && data.current.wind_degree}deg)`,

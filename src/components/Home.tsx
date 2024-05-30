@@ -9,9 +9,10 @@ import SunRise from "./SunRise";
 import useFetch from "../hooks/useFetch";
 import { slugify } from "transliteration";
 import { GiModernCity } from "react-icons/gi";
+import WeatherData from "../interfaces/WeatherData";
 
 //Tablice miast używana na stronie startowej aplikacji
-const citiesArr = [
+const citiesArr: [string, number, number][] = [
   ["Poznań", 30, 38],
   ["Szczecin", 20, 25],
   ["Gdańsk", 40, 20],
@@ -23,16 +24,15 @@ const citiesArr = [
 ];
 
 // tworzony context
-export const CityContext = createContext();
+export const CityContext = createContext<WeatherData | null>(null);
 
 const Home = () => {
   //stan przechowujacy wybrane miasto
   const [city, setCity] = useState("");
   const { data } = useFetch(slugify(city));
-  const searchCityFormRef = useRef(null);
-
+  const searchCityFormRef = useRef<HTMLFormElement | null>(null);
   //funkcja do zmiany stanu miasta
-  const handleSearch = (searchedCity) => {
+  const handleSearch = (searchedCity: string) => {
     setCity(searchedCity);
   };
 
@@ -45,20 +45,22 @@ const Home = () => {
   };
 
   //renderowanie komponentów z tablicy miast
-  const renderCities = citiesArr.map((city, index) => {
-    return (
-      <div
-        key={index}
-        onClick={() => setCity(city[0])}
-        className="cursor-pointer"
-      >
-        <MapMarker city={city[0]} />
-      </div>
-    );
-  });
+  const renderCities = citiesArr.map(
+    (city: [string, number, number], index: number) => {
+      return (
+        <div
+          key={index}
+          onClick={() => setCity(String(city[0]))}
+          className="cursor-pointer"
+        >
+          <MapMarker city={city[0]} />
+        </div>
+      );
+    }
+  );
 
   return (
-    <CityContext.Provider value={{ data }}>
+    <CityContext.Provider value={data}>
       <div className="w-full flex flex-col h-full min-h-screen bg-gradient-to-b from-slate-800 to-slate-600 md:from-gray-400 md:to-gray-200">
         <div className="md:max-w-[900px] w-full mx-auto h-full min-h-screen flex flex-col md:border-l-2 md:border-r-2 md:border-slate-400 md:backdrop-filter md:backdrop-blur-md md:bg-opacity-70 md:bg-black">
           <Link to="/" onClick={handleHomeClick}>
@@ -67,12 +69,15 @@ const Home = () => {
             </h1>
           </Link>
           <SearchCity onSearch={handleSearch} ref={searchCityFormRef} />
-          {city !== "" && data && data.error && data.error.code === 1006 && (
-            <div className="md:max-w-full flex h-[500px] mt-[15%] justify-center items-center text-2xl text-white flex-col">
-              <p>Nie znaleziono lokalizacji</p>
-              <GiModernCity size={120} className="mt-10" />
-            </div>
-          )}
+          {city !== "" &&
+            data &&
+            data["error"] &&
+            data["error"]["code"] === 1006 && (
+              <div className="md:max-w-full flex h-[500px] mt-[15%] justify-center items-center text-2xl text-white flex-col">
+                <p>Nie znaleziono lokalizacji</p>
+                <GiModernCity size={120} className="mt-10" />
+              </div>
+            )}
           {city !== "" ? (
             <>
               <CurrentWeather city={city} />

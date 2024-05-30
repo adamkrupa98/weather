@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useFetch = (cityName) => {
+const useFetch = (cityName: string | null) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
