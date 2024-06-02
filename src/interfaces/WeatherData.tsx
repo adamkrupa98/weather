@@ -13,9 +13,6 @@ export default interface WeatherData {
       humidity: number;
       pressure_mb: number;
     };
-    error?: {
-      code: number;
-      // Inne pola błędu
-    };
-  };
+    error: any;
+  } | null;
 }

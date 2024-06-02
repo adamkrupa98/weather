@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import WeatherData from "../interfaces/WeatherData";
 
 const useFetch = (cityName: string | null) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<WeatherData | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -13,7 +15,13 @@ const useFetch = (cityName: string | null) => {
         .then((response) => response.json())
         .then((responseJson) => {
           setIsLoading(false);
-          setData(responseJson);
+          const currentWeatherData: WeatherData = {
+            data: {
+              current: responseJson.current,
+              error: "responseJson.error",
+            },
+          };
+          setData(currentWeatherData);
         })
         .catch((error) => {
           setIsLoading(false);

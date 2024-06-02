@@ -29,7 +29,8 @@ export const CityContext = createContext<WeatherData | null>(null);
 const Home = () => {
   //stan przechowujacy wybrane miasto
   const [city, setCity] = useState("");
-  const { data } = useFetch(slugify(city));
+  const { data: weatherData } = useFetch(slugify(city));
+
   const searchCityFormRef = useRef<HTMLFormElement | null>(null);
   //funkcja do zmiany stanu miasta
   const handleSearch = (searchedCity: string) => {
@@ -60,7 +61,7 @@ const Home = () => {
   );
 
   return (
-    <CityContext.Provider value={data}>
+    <CityContext.Provider value={weatherData}>
       <div className="w-full flex flex-col h-full min-h-screen bg-gradient-to-b from-slate-800 to-slate-600 md:from-gray-400 md:to-gray-200">
         <div className="md:max-w-[900px] w-full mx-auto h-full min-h-screen flex flex-col md:border-l-2 md:border-r-2 md:border-slate-400 md:backdrop-filter md:backdrop-blur-md md:bg-opacity-70 md:bg-black">
           <Link to="/" onClick={handleHomeClick}>
@@ -70,10 +71,11 @@ const Home = () => {
           </Link>
           <SearchCity onSearch={handleSearch} ref={searchCityFormRef} />
           {city !== "" &&
-            data &&
-            data["error"] &&
-            data["error"]["code"] === 1006 && (
-              <div className="md:max-w-full flex h-[500px] mt-[15%] justify-center items-center text-2xl text-white flex-col">
+            weatherData &&
+            weatherData["data"] &&
+            weatherData["data"]["error"] &&
+            weatherData["data"]["error"]["code"] === 1006 && (
+              <div className="md:max-w-full flex h-[500px] mt-[15%]f justify-center items-center text-2xl text-white flex-col">
                 <p>Nie znaleziono lokalizacji</p>
                 <GiModernCity size={120} className="mt-10" />
               </div>
