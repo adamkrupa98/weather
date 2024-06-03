@@ -6,13 +6,17 @@ import { useContext } from "react";
 import { CityContext } from "./Home";
 
 const SunRise = () => {
-  const { data } = useContext(CityContext);
+  const weatherData = useContext(CityContext);
   const sunrise =
-    data && data.forecast ? data.forecast.forecastday[0].astro.sunrise : null;
+    weatherData && weatherData.data?.forecast
+      ? weatherData.data.forecast.forecastday[0].astro.sunrise
+      : "";
   const sunset =
-    data && data.forecast ? data.forecast.forecastday[0].astro.sunset : null;
+    weatherData && weatherData.data?.forecast
+      ? weatherData.data.forecast.forecastday[0].astro.sunset
+      : "";
 
-  const formatTime = (timeString) => {
+  const formatTime = (timeString: string) => {
     if (!timeString) return "";
     const date = new Date(`01/01/2000 ${timeString}`); // Tworzenie daty zgodnie z oczekiwanym formatem
     return format(date, "HH:mm"); // Konwersja daty do formatu HH:mm
@@ -20,7 +24,7 @@ const SunRise = () => {
 
   return (
     <>
-      {data && data.current && (
+      {weatherData && weatherData.data?.current && (
         <div className="felx flex-col md:w-1/2 w-full mt-2">
           <h1 className="text-3xl w-full pl-[55px] md:text-blue-400 hidden md:block">
             Wschód i zachód:

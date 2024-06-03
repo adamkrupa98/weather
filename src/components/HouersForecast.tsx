@@ -7,10 +7,19 @@ import { useContext } from "react";
 import { CityContext } from "./Home";
 
 const HouersForecast = () => {
-  const { data } = useContext(CityContext);
+  const weatherData = useContext(CityContext);
   const dataArr =
-    data && data.forecast ? [data.forecast.forecastday[0].hour] : null;
-  let dataSelectedHouers = [];
+    weatherData && weatherData.data?.forecast
+      ? [weatherData.data?.forecast.forecastday[0].hour]
+      : null;
+  let dataSelectedHouers: {
+    time: string;
+    condition: {
+      icon: string;
+    };
+    temp_c: string;
+  }[] = [];
+
   if (dataArr) {
     dataSelectedHouers = dataArr[0].filter((hour, index) => {
       return index % 3 === 0 && index > 4;

@@ -4,11 +4,13 @@ import { useContext } from "react";
 import { CityContext } from "./Home";
 
 const NextDays = () => {
-  const { data } = useContext(CityContext);
+  const weatherData = useContext(CityContext);
 
   const dataArr = useMemo(() => {
-    return data && data.forecast ? [data.forecast.forecastday] : null;
-  }, [data]);
+    return weatherData && weatherData.data?.forecast
+      ? [weatherData.data.forecast.forecastday]
+      : null;
+  }, [weatherData]);
 
   const nextDaysData =
     dataArr && Array.isArray(dataArr) && dataArr.length > 0
