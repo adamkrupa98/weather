@@ -1,5 +1,3 @@
-export {};
-
 declare module "../hooks/useFetch" {
   export interface WeatherData {
     data: any;
@@ -7,3 +5,5 @@ declare module "../hooks/useFetch" {
     error: any;
   }
 }
+
+declare module "react-slick";

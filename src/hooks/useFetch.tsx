@@ -15,9 +15,11 @@ const useFetch = (cityName: string | null) => {
         .then((response) => response.json())
         .then((responseJson) => {
           setIsLoading(false);
+          console.log(responseJson);
           const currentWeatherData: WeatherData = {
             data: {
               current: responseJson.current,
+              forecast: responseJson.forecast,
               error: "responseJson.error",
             },
           };

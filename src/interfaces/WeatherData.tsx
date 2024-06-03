@@ -13,6 +13,28 @@ export default interface WeatherData {
       humidity: number;
       pressure_mb: number;
     };
+    forecast: {
+      forecastday: {
+        hour: {
+          time: string;
+          condition: {
+            icon: string;
+          };
+          temp_c: string;
+        }[];
+        date: string;
+        day: {
+          condition: {
+            icon: string;
+          };
+          avgtemp_c: string;
+        };
+        astro: {
+          sunrise: string;
+          sunset: string;
+        };
+      }[];
+    };
     error: any;
   } | null;
 }

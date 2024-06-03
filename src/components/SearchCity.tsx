@@ -3,62 +3,71 @@ import { IoMdSearch } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 
+interface SearchFromData {
+  city: string;
+}
 interface SearchCityProps {
   onSearch: (searchedCity: string) => void;
 }
-const SearchCity = React.forwardRef(({ onSearch }: SearchCityProps, ref) => {
-  const {
-    register,
-    handleSubmit,
-    clearErrors,
-    formState: { errors },
-  } = useForm({ mode: "onSubmit", reValidateMode: "onSubmit" });
 
-  const onSubmit = (data) => {
-    onSearch(data.city);
-  };
+const SearchCity = React.forwardRef(
+  ({ onSearch }: SearchCityProps, ref: React.ForwardedRef<HTMLFormElement>) => {
+    const {
+      register,
+      handleSubmit,
+      clearErrors,
+      formState: { errors },
+    } = useForm<SearchFromData>({
+      mode: "onSubmit",
+      reValidateMode: "onSubmit",
+    });
 
-  useEffect(() => {
-    let clearErrorTimeout;
-    if (errors.city) {
-      clearErrorTimeout = setTimeout(() => {
-        clearErrors("city");
-      }, 2000);
-    }
-    return () => clearTimeout(clearErrorTimeout);
-  }, [errors.city, clearErrors]);
+    const onSubmit = (data: SearchFromData) => {
+      onSearch(data.city);
+    };
 
-  return (
-    <form
-      ref={ref}
-      onSubmit={handleSubmit(onSubmit)}
-      className="w-full mt-5 md:absolute md:w-[400px] flex flex-col justify-center md:left-[550px]"
-    >
-      <div className="flex w-full justify-center md:left-[550px]">
-        <input
-          type="text"
-          {...register("city", {
-            required: "Nazwa miasta jest wymagana!",
-          })}
-          className="rounded-full py-3 px-10 bg-transparent placeholder:text-white text-white border-2 select-none focus:outline-none border-white"
-          placeholder="Wyszukaj miasto..."
+    useEffect(() => {
+      let clearErrorTimeout: NodeJS.Timeout;
+      if (errors.city) {
+        clearErrorTimeout = setTimeout(() => {
+          clearErrors("city");
+        }, 2000);
+      }
+      return () => clearTimeout(clearErrorTimeout);
+    }, [errors.city, clearErrors]);
+
+    return (
+      <form
+        ref={ref}
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full mt-5 md:absolute md:w-[400px] flex flex-col justify-center md:left-[550px]"
+      >
+        <div className="flex w-full justify-center md:left-[550px]">
+          <input
+            type="text"
+            {...register("city", {
+              required: "Nazwa miasta jest wymagana!",
+            })}
+            className="rounded-full py-3 px-10 bg-transparent placeholder:text-white text-white border-2 select-none focus:outline-none border-white"
+            placeholder="Wyszukaj miasto..."
+          />
+          <button className=" py-[12px] px-3 rounded-e-full absolute translate-x-[105px] ">
+            <IoMdSearch size={25} className="text-white" />
+          </button>
+        </div>
+
+        <ErrorMessage
+          errors={errors}
+          name="city"
+          render={({ message }) => (
+            <p className="flex w-full justify-center text-red-500 md:left-[550px] mt-2 text-l font-[700]">
+              {message}
+            </p>
+          )}
         />
-        <button className=" py-[12px] px-3 rounded-e-full absolute translate-x-[105px] ">
-          <IoMdSearch size={25} className="text-white" />
-        </button>
-      </div>
-
-      <ErrorMessage
-        errors={errors}
-        name="city"
-        render={({ message }) => (
-          <p className="flex w-full justify-center text-red-500 md:left-[550px] mt-2 text-l font-[700]">
-            {message}
-          </p>
-        )}
-      />
-    </form>
-  );
-});
+      </form>
+    );
+  }
+);
 
 export default SearchCity;
